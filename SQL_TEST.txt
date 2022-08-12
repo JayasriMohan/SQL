@@ -1,0 +1,155 @@
+What are the differences between local and global temporary tables?
+       --A table consist of rows and columns,Local table can be accessed within the database 
+whereas global table can be accessed from anywhere or outside from other data bases too.
+
+
+What is CHECK constraint?
+       -- Check constarint query is used in SQL in order to check the condition or making constraint 
+keys.which are included primary key,foreign key and etc..
+
+
+
+What is a Trigger?
+       --Trigger is such a thing which is used in SQL to simply block the operation of dml and ddl in dbms
+like insert, update,delete .if a table or a database or a server has been triggered then there is no 
+chance to use ddl or dml in that particular table or a database or a server operation untill otherwise 
+the trigger has disabled
+
+
+
+What is an IDENTITY column in insert statements?
+        --An identity column is used in insert statement which will provide a automatic increasing value for
+the given number of limit
+ex:create table workers(worker_id int primary key identity(1,1)
+
+
+
+What is the difference between COMMIT and ROLLBACK?
+        -- Commit permits the user to do certain task or action whereas Rollback will undo the operation
+which is already performed by the commit statement
+
+
+
+What is a JOIN, and mention its Types?
+        -- Join is a technique used in SQL to connect more than one table in a databse.There are several
+types of join available in sql
+They are:
+        Inner join
+        Outer join
+        Full join
+        Right join
+        Left join
+
+
+
+How can you relate a Foreign Key and a Primary Key?
+        --It is possible relate a foreign key and a primary key using references key word
+ex:FOREIGN KEY (WORKER_REF_ID) REFERENCES Worker(WORKER_ID)
+
+
+
+What is the difference between Stored Procedures and Functions?
+        --Functions are having certain task itself and it has parameters to pass the values through that,
+it has to be called each and every time whenever needed.Whereas a storedprocedure are pre-compiled functions
+which are stored in the database .stored functions are more faster than the functions.because they are pre_complied .
+
+
+
+What do you mean by Clustered Indexes?
+        --Clusterd index means the physical order of data.A table can contain only one clusterd index ,clustered index
+will automatically created when the table has a primary key.If a table doesn't has a primary key then the clustered 
+index should be created manually 
+
+
+
+
+create database Test
+use Test
+
+create table workers(
+       worker_id int primary key identity(001,1),
+	   first_name varchar(10),
+	   last_name varchar(10),
+	   Salary int,
+	   joining_date datetime,
+	   department varchar(10))
+	   select * from workers
+	 
+insert into workers values('Monika','Arora',100000,'2014-02-20 09:00:00','HR')
+insert into workers values('Niharika','Verma',80000,'2014-06-11 09:00:00','Admin')
+insert into workers values('Vishal','Singhal',300000,'2014-02-20 09:00:00','HR')
+insert into workers values('Amitabh','Singh',500000,'2014-02-20 09:00:00','Admin')
+insert into workers values('Vivek','Bhati',500000,'2014-06-11 09:00:00','Admin')
+insert into workers values('Vipul','Diwan',200000,'2014-06-11 09:00:00','Account')
+insert into workers values('Satish','Kumar',75000,'2014-01-20 09:00:00','Account')
+insert into workers values('Geetika','Chauhan',90000,'2014-04-11 09:00:00','Admin')
+
+
+create table Bonus (Worker_Ref_id int,Bonus_Amount int,Bonus_Date datetime ,Foreign key(Worker_Ref_id)
+REFERENCES Worker(Worker_id)On DELETE Cascade) 
+
+INSERT INTO Bonus 
+	(Worker_Ref_id, Bonus_Amount, Bonus_Date) VALUES
+		(101, 5000, '16-02-2020'),
+		(102, 3000, '16-06-2011'),
+		(103, 4000, '16-02-2020'),
+		(101, 4500, '16-02-2020'),
+		(102, 3500, '16-06-2011')
+
+
+CREATE TABLE Title (
+	Worker_Ref_id INT,
+	Worker_Title CHAR(25),
+	AFFECTED_FROM DATETIME,
+	FOREIGN KEY (Worker_Ref_id)
+		REFERENCES Worker(Worker_Id)
+        ON DELETE CASCADE
+)
+
+INSERT INTO Title 
+	(Worker_Ref_id, Worker_Title, Affected_From) VALUES
+ (101, 'Manager', '08-02-2020 05:39:00'),
+ (102, 'Executive', '08-05-2020 05:39:00'),
+ (103, 'Executive', '08-05-2020 05:39:00'),
+ (104, 'Manager', '08-05-2020 05:39:00'),
+ (105, 'Asst. Manager', '08-05-2020 05:39:00'),
+ (106, 'Executive', '08-05-2020 05:39:00'),
+ (107, 'Lead', '08-05-2020 05:39:00'),
+ (108, 'Lead', '08-05-2020 05:39:00')
+
+
+ --Write an SQL query to clone a new table from another table.
+  create synonym clone for workers
+  select * from clone
+
+--Write an SQL query to print the FIRST_NAME and LAST_NAME from Worker table into a single column COMPLETE_NAME.
+--A space char should separate them.
+  select CONCAT(First_name,'  ', Last_name) as Complete_name FROM Worker
+
+--Write an SQL query to print all Worker details from the Worker table order by FIRST_NAME Ascending.
+  select * from workers order by first_name asc
+
+--Write an SQL query to print details of the Workers whose SALARY lies between 100000 and 500000.
+  select * from workers where salary between 100000 and 500000
+
+--Write an SQL query to fetch the no. of workers for each department in the descending order
+   select count(department) as dept_count, department from workers group by department 
+
+--Create a DML trigger for update on table ‘Title’
+create trigger trg_dml
+on Title
+FOR INSERT,UPDATE,DELETE
+as
+begin
+	print 'You cannot perform DML Operations'
+	rollback transaction 
+end
+insert into Title values(101, 'Manager', '08-02-2020 05:39:00')
+
+  
+
+
+
+
+  
+
